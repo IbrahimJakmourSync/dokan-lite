@@ -231,7 +231,7 @@ function dokan_count_orders( $user_id ) {
     $counts      = wp_cache_get( $cache_key, $cache_group );
 
     if ( $counts === false ) {
-        $counts = array('wc-pending' => 0, 'wc-completed' => 0, 'wc-on-hold' => 0, 'wc-processing' => 0, 'wc-refunded' => 0, 'wc-cancelled' => 0, 'total' => 0);
+        $counts = array('wc-pending' => 0, 'wc-completed' => 0, 'wc-on-hold' => 0, 'wc-processing' => 0, 'wc-refunded' => 0,'wc-ready-to-deliver' => 0,'wc-pickedup' => 0, 'wc-cancelled' => 0, 'total' => 0);
 
         $results = $wpdb->get_results( $wpdb->prepare( "SELECT do.order_status
             FROM {$wpdb->prefix}dokan_orders AS do
@@ -676,6 +676,7 @@ function dokan_get_admin_commission_by( $order, $seller_id ) {
 
         $refund_t                      += $order->get_total_refunded_for_item( $item_id );
         $commissions[$i]['total_line'] = $item->get_total() - $order->get_total_refunded_for_item( $item_id );
+        $commissions[$i]['quantity']   = $item->get_quantity();
         $commissions[$i]['fee_type']   = dokan_get_commission_type( $seller_id, $item['product_id'] );
         $commissions[$i]['admin_fee']  = ( 'percentage' == $commissions[$i]['fee_type'] ) ? 100 - dokan_get_seller_percentage( $seller_id, $item['product_id'] ) : dokan_get_seller_percentage( $seller_id, $item['product_id'] );
         $total_line                    += $commissions[$i]['total_line'];
@@ -691,9 +692,19 @@ function dokan_get_admin_commission_by( $order, $seller_id ) {
             $commission['ut_amount'] = $refund_ut * ( $commission['total_line'] / $total_line );
 
             if ( 'percentage' == $commission['fee_type'] ) {
-                $admin_commission += ( $commission['total_line'] + $commission['ut_amount'] ) * $commission['admin_fee'] /100;
+                $per_commission = (( $commission['total_line'] + $commission['ut_amount'] ) * $commission['admin_fee'] /100) / $commission['quantity'];
+                if($per_commission > 5){
+                   $admin_commission +=$per_commission * $commission['quantity']; 
+                }else{
+                  $admin_commission +=5 * $commission['quantity'];  
+                }
             } else {
-                $admin_commission += $commission['admin_fee'];
+                $per_commission = $commission['admin_fee'];
+                 if($per_commission > 5){
+                   $admin_commission +=$per_commission * $commission['quantity']; 
+                }else{
+                  $admin_commission +=5 * $commission['quantity'];  
+                }
             }
         }
     }

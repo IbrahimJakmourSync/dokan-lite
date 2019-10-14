@@ -341,7 +341,7 @@ function dokan_site_total_earning() {
  */
 function dokan_admin_report_data( $group_by = 'day', $year = '', $start = '', $end = '', $seller_id = '' ) {
     global $wpdb;
-
+    
     $_post_data   = wp_unslash( $_POST ); // WPCS: CSRF ok.
     $group_by     = apply_filters( 'dokan_report_group_by', $group_by );
     $start_date   = isset( $_post_data['start_date'] ) ? sanitize_text_field ( $_post_data['start_date'] ): $start; // WPCS: CSRF ok.
@@ -373,7 +373,8 @@ function dokan_admin_report_data( $group_by = 'day', $year = '', $start = '', $e
         $group_by_query = 'YEAR(p.post_date), MONTH(p.post_date)';
         $date_where     = " AND DATE(p.post_date) >= '$start_date' AND DATE(p.post_date) <= '$end_date'";
     }
-
+   
+    $status       = dokan_withdraw_get_active_order_status_in_comma();
     $left_join    = apply_filters( 'dokan_report_left_join', $date_where );
     $date_where   = apply_filters( 'dokan_report_where', $date_where );
     $seller_where = $seller_id ? "seller_id = {$seller_id}" : "seller_id != " . 0;
@@ -389,7 +390,7 @@ function dokan_admin_report_data( $group_by = 'day', $year = '', $start = '', $e
             WHERE
                 $seller_where AND
                 p.post_status != 'trash' AND
-                do.order_status IN ('wc-on-hold', 'wc-completed', 'wc-processing')
+                do.order_status IN ($status)
                 $date_where
             GROUP BY $group_by_query";
 

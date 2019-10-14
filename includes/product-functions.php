@@ -26,7 +26,7 @@ function dokan_save_product( $args ) {
         'post_type'      => 'product',
         '_visibility'    => 'visible',
     );
-
+    
     $data = wp_parse_args( $args, $defaults );
 
     if ( empty( $data['post_title'] ) ) {

@@ -364,7 +364,7 @@ class Dokan_Template_Products {
         }
 
         $errors     = array();
-        $post_title = sanitize_text_field( $postdata['post_title'] );
+        $post_title = sanitize_text_field( $postdata['post_title'] ); 
 
         if ( empty( $post_title ) ) {
             $errors[] = __( 'Please enter product title', 'dokan-lite' );

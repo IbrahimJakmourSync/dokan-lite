@@ -177,6 +177,7 @@ class Dokan_Admin {
             'title'  => __( 'Dokan', 'dokan-lite' ),
             'href'   => admin_url( 'admin.php?page=dokan' )
         );
+        
 
         $wp_admin_bar->add_menu( $args );
 

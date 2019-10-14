@@ -175,7 +175,9 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
                                         <div class="dokan-form-group">
                                             <label for="product_type" class="form-label"><?php esc_html_e( 'Product Type', 'dokan-lite' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php esc_html_e( 'Choose Variable if your product has multiple attributes - like sizes, colors, quality etc', 'dokan-lite' ); ?>"></i></label>
                                             <select name="product_type" class="dokan-form-control" id="product_type">
-                                                <?php foreach ( $product_types as $key => $value ) { ?>
+                                                <?php foreach ( $product_types as $key => $value ) {
+                                                if($value=="Variable"){$value="Custom Product";}
+                                                ?>
                                                     <option value="<?php echo esc_attr( $key ) ?>" <?php selected( $product_type, $key ) ?>><?php echo esc_html( $value ) ?></option>
                                                 <?php } ?>
                                             </select>

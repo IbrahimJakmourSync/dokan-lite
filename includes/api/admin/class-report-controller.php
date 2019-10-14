@@ -50,6 +50,7 @@ class Dokan_REST_Admin_Report_Controller extends Dokan_REST_Admin_Controller {
         require_once DOKAN_INC_DIR . '/admin-functions.php';
 
         $params = $request->get_params();
+        
 
         $from      = isset( $params['from'] ) ? sanitize_text_field( $params['from'] ) : null;
         $to        = isset( $params['to'] ) ? sanitize_text_field( $params['to'] ) : null;

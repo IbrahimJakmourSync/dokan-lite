@@ -190,7 +190,7 @@
                                     </div>
 
                                     <div class="dokan-form-group">
-                                        <textarea name="post_excerpt" id="post-excerpt" rows="5" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Short description of the product...', 'dokan-lite' ); ?>"><?php echo esc_attr( dokan_posted_textarea( 'post_excerpt' ) ); ?></textarea>
+                                        <textarea name="post_excerpt" id="post-excerpt" rows="5" class="dokan-form-control" style="height:100px;" placeholder="<?php esc_attr_e( 'Short description of the product...', 'dokan-lite' ); ?>"><?php echo esc_attr( dokan_posted_textarea( 'post_excerpt' ) ); ?></textarea>
                                     </div>
 
                                     <?php if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ): ?>
@@ -243,40 +243,16 @@
                                         </div>
                                     <?php endif; ?>
 
-                                    <div class="dokan-form-group">
-                                        <?php
-                                        require_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
-
-                                        $selected_tag   = dokan_posted_input( 'product_tag', true );
-                                        $selected_tag  = empty( $selected_tag ) ? array() : $selected_tag;
-
-                                        $drop_down_tags = wp_dropdown_categories( array(
-                                            'show_option_none' => __( '', 'dokan-lite' ),
-                                            'hierarchical'     => 1,
-                                            'hide_empty'       => 0,
-                                            'name'             => 'product_tag[]',
-                                            'id'               => 'product_tag',
-                                            'taxonomy'         => 'product_tag',
-                                            'title_li'         => '',
-                                            'class'            => 'product_tags dokan-form-control',
-                                            'exclude'          => '',
-                                            'selected'         => $selected_tag,
-                                            'echo'             => 0,
-                                            'walker'           => new DokanTaxonomyWalker()
-                                        ) );
-
-                                        echo str_replace( '<select', '<select data-placeholder="'.esc_attr__( 'Select product tags', 'dokan-lite' ).'" multiple="multiple" ', $drop_down_tags ); // phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped
-                                        ?>
-                                    </div>
+                                    
 
                                     <?php do_action( 'dokan_new_product_after_product_tags' ); ?>
                                 </div>
                             </div>
 
-                            <div class="dokan-form-group">
+                            <!--<div class="dokan-form-group">
                                 <label for="post_content" class="control-label"><?php esc_html_e( 'Description', 'dokan-lite' ) ?> <i class="fa fa-question-circle tips" data-title="<?php esc_attr_e( 'Add your product description', 'dokan-lite' ) ?>" aria-hidden="true"></i></label>
                                 <?php wp_editor( htmlspecialchars_decode( $post_content, ENT_QUOTES ), 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
-                            </div>
+                            </div>-->
 
                             <?php do_action( 'dokan_new_product_form' ); ?>
 

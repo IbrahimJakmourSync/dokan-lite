@@ -91,6 +91,7 @@
         <?php
         if ( $product->get_type() == 'simple' ) {
             $price = wc_price( dokan_get_earning_by_product( $product->get_id(), get_current_user_id() ) );
+            print_r($price);
             echo wp_kses( $price, $price_kses );
         } else {
             $price = dokan_get_variable_product_earning( $product->get_id(), get_current_user_id() );

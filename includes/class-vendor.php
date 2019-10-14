@@ -578,18 +578,20 @@ class Dokan_Vendor {
             $installed_version = get_option( 'dokan_theme_version' );
 
             if ( ! $installed_version || version_compare( $installed_version, '2.8.2', '>' ) ) {
+                
                 $debit_balance  = $wpdb->get_row( $wpdb->prepare(
                     "SELECT SUM(debit) AS earnings
-                    FROM {$wpdb->prefix}dokan_vendor_balance
+                    FROM {$wpdb->prefix}dokan_vendor_balance LEFT JOIN $wpdb->posts p ON {$wpdb->prefix}dokan_vendor_balance.trn_id = p.ID
                     WHERE
-                        vendor_id = %d AND DATE(balance_date) <= %s AND status IN ($status) AND trn_type = 'dokan_orders'",
+                        vendor_id = %d AND DATE(balance_date) <= %s AND status IN ($status) AND trn_type = 'dokan_orders' AND p.post_type = 'shop_order' AND
+                p.post_status != 'trash'",
                     $this->id, $on_date ) );
 
                $credit_balance = $wpdb->get_row( $wpdb->prepare(
                     "SELECT SUM(credit) AS earnings
-                    FROM {$wpdb->prefix}dokan_vendor_balance
+                    FROM {$wpdb->prefix}dokan_vendor_balance LEFT JOIN $wpdb->posts p ON {$wpdb->prefix}dokan_vendor_balance.trn_id = p.ID
                     WHERE
-                        vendor_id = %d AND DATE(balance_date) <= %s AND trn_type = %s AND status = %s",
+                        vendor_id = %d AND DATE(balance_date) <= %s AND trn_type = %s AND status = %s AND p.post_status != 'trash'",
                     $this->id, $on_date, $trn_type, $refund_status ) );
 
                 $earnings         = $debit_balance->earnings - $credit_balance->earnings;

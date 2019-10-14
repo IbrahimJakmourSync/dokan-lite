@@ -1401,29 +1401,67 @@ jQuery(function($) {
             }
 
             if ( commission_type == 'percentage' ) {
-                if ( $('input.dokan-product-sales-price' ).val() == '' ) {
+                 if ( $('input.dokan-product-sales-price' ).val() == '' ) {
+                    var newValue=( ( $( 'input.dokan-product-regular-price' ).val() * vendor_percentage ) / 100 );
+                    var value=$( 'input.dokan-product-regular-price' ).val();
+                    var total=(parseFloat(value)-parseFloat(newValue));
+                    var commission=0;
+                    if (parseFloat(total) > 5) {
+                     commission=total;
+                     } else {
+                     commission=5;
+                     newValue=value-commission;
+                    }
                     $( 'span.vendor-price' ).html(
-                        parseFloat( accounting.formatNumber( ( ( $( 'input.dokan-product-regular-price' ).val() * vendor_percentage ) / 100 ), dokan.rounding_precision, '' ) )
+                        parseFloat( accounting.formatNumber( newValue, dokan.rounding_precision, '' ) )
                             .toString()
                             .replace( '.', dokan.mon_decimal_point )
                     );
                 } else {
+                     var newValue=( ( $( 'input.dokan-product-sales-price' ).val() * vendor_percentage ) / 100 );
+                    var value=$( 'input.dokan-product-sales-price' ).val();
+                    var total=(parseFloat(value)-parseFloat(newValue));
+                    var commission=0;
+                    if (parseFloat(total) > 5) {
+                      commission=total;
+                     } else {
+                     commission=5;
+                     newValue=value-commission;
+                    }
                     $( 'span.vendor-price' ).html(
-                        parseFloat( accounting.formatNumber( ( ( $( 'input.dokan-product-sales-price' ).val() * vendor_percentage ) / 100 ), dokan.rounding_precision, '' ) )
+                        parseFloat( accounting.formatNumber( newValue, dokan.rounding_precision, '' ) )
                             .toString()
                             .replace( '.', dokan.mon_decimal_point )
                     );
                 }
             } else {
                 if ( $('input.dokan-product-sales-price' ).val() == '' ) {
+                     var newValue=( $( 'input.dokan-product-regular-price' ).val() - vendor_percentage );
+                    var value=$( 'input.dokan-product-regular-price' ).val();
+                    var total=(parseFloat(value)-parseFloat(newValue));
+                    var commission=0;
+                    if (parseFloat(total) > 5) {
+                     commission=newValue;
+                     } else {
+                     commission=5;
+                    }
                     $( 'span.vendor-price' ).html(
-                        parseFloat( accounting.formatNumber( ( $( 'input.dokan-product-regular-price' ).val() - vendor_percentage ), dokan.rounding_precision, '' ) )
+                        parseFloat( accounting.formatNumber( commission, dokan.rounding_precision, '' ) )
                             .toString()
                             .replace( '.', dokan.mon_decimal_point )
                     );
                 } else {
+                    var newValue=( $( 'input.dokan-product-sales-price' ).val() - vendor_percentage );
+                    var value=$( 'input.dokan-product-sales-price' ).val();
+                    var total=(parseFloat(value)-parseFloat(newValue));
+                    var commission=0;
+                    if (parseFloat(total) > 5) {
+                     commission=newValue;
+                     } else {
+                     commission=5;
+                    }
                     $( 'span.vendor-price' ).html(
-                        parseFloat( accounting.formatNumber( ( $( 'input.dokan-product-sales-price' ).val() - vendor_percentage ), dokan.rounding_precision, '' ) )
+                        parseFloat( accounting.formatNumber( commission, dokan.rounding_precision, '' ) )
                             .toString()
                             .replace( '.', dokan.mon_decimal_point )
                     );

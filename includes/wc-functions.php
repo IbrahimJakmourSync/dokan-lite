@@ -29,6 +29,14 @@ function dokan_process_product_meta( $post_id, $data = [] ) {
     // Product type + Downloadable/Virtual
     update_post_meta( $post_id, '_downloadable', $is_downloadable );
     update_post_meta( $post_id, '_virtual', $is_virtual );
+    
+    $personalize = isset( $data['_personalize'] ) ? $data['_personalize'] : '';
+    $additional_note_seller = isset( $data['_additional_note_seller'] ) ? $data['_additional_note_seller'] : '';
+    $processing_time = isset( $data['_processing_time'] ) ? $data['_processing_time'] : '';
+    
+    update_post_meta( $post_id, '_personalize', $personalize );
+    update_post_meta( $post_id, '_additional_note_seller', $additional_note_seller );
+    update_post_meta( $post_id, '_processing_time', $processing_time );
 
     // Gallery Images
     if ( isset( $data['product_image_gallery'] ) ) {

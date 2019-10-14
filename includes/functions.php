@@ -370,13 +370,15 @@ function dokan_author_pageviews( $seller_id ) {
 function dokan_author_total_sales( $seller_id ) {
     global $wpdb;
 
+    $status       = dokan_withdraw_get_active_order_status_in_comma();
     $cache_group = 'dokan_seller_data_' . $seller_id;
     $cache_key   = 'dokan-earning-' . $seller_id;
     $earnings    = wp_cache_get( $cache_key, $cache_group );
 
     if ( $earnings === false ) {
         $count = $wpdb->get_row(
-            $wpdb->prepare( "SELECT SUM(order_total) as earnings FROM {$wpdb->prefix}dokan_orders WHERE seller_id = %d AND order_status IN('wc-completed', 'wc-processing', 'wc-on-hold')", $seller_id )
+            $wpdb->prepare( "SELECT SUM(order_total) as earnings FROM {$wpdb->prefix}dokan_orders LEFT JOIN $wpdb->posts p ON {$wpdb->prefix}dokan_orders.order_id = p.ID WHERE seller_id = %d AND order_status IN($status) AND p.post_type = 'shop_order' AND
+                p.post_status != 'trash'", $seller_id )
         );
 
         $earnings = $count->earnings;
@@ -471,11 +473,12 @@ if ( ! function_exists( 'dokan_get_seller_percentage' ) ) :
      *
      * @return int
      */
+     #commision start
     function dokan_get_seller_percentage( $seller_id = 0, $product_id = 0, $category_id = 0 ) {
 
         // Seller will get 100 percent if ( any_input_val < 0 || percentage_input_val > 100 )
         $commission_val = 100;
-
+       
         //Global percentage
         $global_percentage = dokan_get_option( 'admin_percentage', 'dokan_selling', 0 );
 
@@ -484,7 +487,6 @@ if ( ! function_exists( 'dokan_get_seller_percentage' ) ) :
             $global_type = dokan_get_option( 'commission_type', 'dokan_selling', 'percentage' );
 
             if ( 'percentage' == $global_type ) {
-
                 if ( $global_percentage <= 100 ) {
                     $commission_val = (float) ( 100 - $global_percentage );
                 }
@@ -502,10 +504,11 @@ if ( ! function_exists( 'dokan_get_seller_percentage' ) ) :
                 $admin_percentage_type = get_user_meta( $seller_id, 'dokan_admin_percentage_type', true );
 
                 if ( 'percentage' == $admin_percentage_type ) {
-
+                  
                     if ( $admin_commission <= 100 ) {
                         $commission_val = (float) ( 100 - $admin_commission );
                     }
+                   
                 } elseif ( 'flat' == $admin_percentage_type ) {
                     $commission_val = (float) $admin_commission;
                 }
@@ -524,7 +527,7 @@ if ( ! function_exists( 'dokan_get_seller_percentage' ) ) :
                 $category_commission_type = dokan_get_category_wise_seller_commission_type( $product_id, $category_id );
 
                 if ( 'percentage' == $category_commission_type ) {
-
+                   
                     if ( $category_commission <= 100 ) {
                         $commission_val = (float) ( 100 - $category_commission );
                     }
@@ -541,6 +544,7 @@ if ( ! function_exists( 'dokan_get_seller_percentage' ) ) :
                 $_per_product_commission_type = get_post_meta( $product_id, '_per_product_admin_commission_type', true );
 
                 if ( 'percentage' == $_per_product_commission_type ) {
+                    
                     if ( $_per_product_commission <= 100 ) {
                         $commission_val = (float) ( 100 - $_per_product_commission );
                     }
@@ -552,7 +556,7 @@ if ( ! function_exists( 'dokan_get_seller_percentage' ) ) :
 
         return apply_filters( 'dokan_get_seller_percentage', $commission_val, $seller_id, $product_id );
     }
-
+#commision end
 endif;
 
 /**
@@ -2806,6 +2810,10 @@ function dokan_get_earning_by_product( $product_id, $seller_id ) {
     $percentage_type    = dokan_get_commission_type( $seller_id, $product_id );
     $price              = $product->get_price();
     $earning            = 'percentage' == $percentage_type ? (float) ( $price * $percentage ) / 100 : $price - $percentage;
+    $total=$price-$earning;
+    if($total < 5){
+      $earning=$price-5; 
+    }
 
     return wc_format_decimal( $earning );
 }

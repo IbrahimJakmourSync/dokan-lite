@@ -203,7 +203,7 @@ class Dokan_Shortcodes {
     function store_listing( $atts ) {
 
         $defaults = array(
-            'per_page' => 10,
+            'per_page' => 12,
             'search'   => 'yes',
             'per_row'  => 3,
             'featured' => 'no'

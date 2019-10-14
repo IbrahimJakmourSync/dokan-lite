@@ -156,3 +156,24 @@
   display: flex;
   justify-content: center;
 }
+
+.wc-setup .wc-setup-actions .button-primary {
+    color: #fff;
+    background: #64cec8 !important;
+    border-color: #64cec8 !important;
+    text-shadow: none !important;
+}
+
+
+.wc-setup .wc-setup-steps li.done, .wc-setup .wc-setup-steps li.active {
+    color: #64cec8 !important;
+    border-color: #64cec8 !important;
+}
+
+
+.wc-setup .wc-setup-steps li.done:before, .wc-setup .wc-setup-steps li.active:before {
+    background: #64cec8;
+    border-color: #64cec8 !important;
+}
+
+

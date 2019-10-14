@@ -537,9 +537,15 @@ class Dokan_Setup_Wizard {
                                 </label>
                             </li>
                             <li class="checkbox">
-                                <input type="checkbox" name="withdraw_order_status[wc-on-hold]" id="withdraw_order_status[wc-on-hold]" class="switch-input" value="wc-on-hold" <?php echo ( array_key_exists( 'wc-on-hold', $withdraw_order_status ) ) ? 'checked="true"' : ''; ?>>
-                                <label for="withdraw_order_status[wc-on-hold]">
-                                    <?php esc_html_e( 'On-hold', 'dokan-lite' ); ?>
+                                <input type="checkbox" name="withdraw_order_status[wc-pickedup]" id="withdraw_order_status[wc-pickedup]" class="switch-input" value="wc-pickedup" <?php echo ( array_key_exists( 'wc-pickedup', $withdraw_order_status ) ) ? 'checked="true"' : ''; ?>>
+                                <label for="withdraw_order_status[wc-pickedup]">
+                                    <?php esc_html_e( 'Picked Up', 'dokan-lite' ); ?>
+                                </label>
+                            </li>
+                             <li class="checkbox">
+                                <input type="checkbox" name="withdraw_order_status[wc-ready-to-deliver]" id="withdraw_order_status[wc-ready-to-deliver]" class="switch-input" value="wc-ready-to-deliver" <?php echo ( array_key_exists( 'wc-ready-to-deliver', $withdraw_order_status ) ) ? 'checked="true"' : ''; ?>>
+                                <label for="withdraw_order_status[wc-ready-to-deliver]">
+                                    <?php esc_html_e( 'Ready To Deliver', 'dokan-lite' ); ?>
                                 </label>
                             </li>
                         </ul>
